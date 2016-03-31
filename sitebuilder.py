@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 import sys
-from flask import Flask, render_template
-from flask_flatpages import FlatPages
+from flask import Flask, render_template, render_template_string, Markup
+from flask_flatpages import FlatPages, pygmented_markdown
 from flask_frozen import Freezer
 
 DEBUG = True
@@ -28,6 +29,13 @@ def page(path):
 def tag(tag):
     tagged = [p for p in pages if tag in p.meta.get('tags', [])]
     return render_template('tag.html', pages=tagged, tag=tag)
+
+
+def prerender_jinja(text):
+    prerendered_body = render_template_string(Markup(text))
+    return pygmented_markdown(prerendered_body)
+
+app.config['FLATPAGES_HTML_RENDERER'] = prerender_jinja
 
 
 if __name__ == '__main__':
