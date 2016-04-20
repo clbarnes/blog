@@ -3,6 +3,7 @@ import sys
 from flask import Flask, render_template, render_template_string, Markup
 from flask_flatpages import FlatPages, pygmented_markdown
 from flask_frozen import Freezer
+from configparser import ConfigParser
 
 DEBUG = True
 FLATPAGES_AUTO_RELOAD = DEBUG
@@ -12,7 +13,6 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 pages = FlatPages(app)
 freezer = Freezer(app)
-
 
 @app.route('/')
 def index():
@@ -42,4 +42,4 @@ if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'build':
         freezer.freeze()
     else:
-        app.run(port=8000)
+        app.run(host='0.0.0.0', port=8000)
